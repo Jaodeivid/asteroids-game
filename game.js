@@ -13,6 +13,38 @@ var puedoDisparar = true
 var mouseX = canvas.width / 2
 var mouseY = canvas.height / 2
 
+var asteroides = []
+
+function crearAsteroide(x, y, tam) {
+  asteroides.push({
+    x: x,
+    y: y,
+    radio: tam,
+    //vel_x: Math.random() * 2 - 1,
+    //vel_y: Math.random() * 2 - 1
+    vel_x: (Math.random() - 0.5) * 2,
+    vel_y: (Math.random() - 0.5) * 2,
+    semilla: Math.random() * 10
+  })
+}
+function dibujarAsteroides() {
+  asteroides.forEach(function(ast) {
+    ctx.beginPath()
+    var puntos = 8
+    for (var i = 0; i <= puntos; i++) {
+      var angulo = (i / puntos) * Math.PI * 2
+      // variacion aleatoria pero fija por asteroide
+      var r = ast.radio * (0.85 + Math.sin(i * ast.semilla) * 0.15)
+      var px = ast.x + Math.cos(angulo) * r
+      var py = ast.y + Math.sin(angulo) * r
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py)
+    }
+    ctx.closePath()
+    ctx.strokeStyle = "white"
+    ctx.stroke()
+  })
+}
+
 function crearEstrellas() {
   for (var i = 0; i < 100; i++) {
     var estrella = document.createElement("div")
@@ -39,7 +71,7 @@ function disparar() {
     puedoDisparar = false
     setTimeout(function() {
       puedoDisparar = true
-    }, 300)
+    }, 200)
   }
 }
 function dibujarNave() {
@@ -77,6 +109,45 @@ function update() {
       balas.splice(i, 1)
     }
   }
+  // mover asteroides
+  asteroides.forEach(function(ast) {
+    ast.x += ast.vel_x
+    ast.y += ast.vel_y
+
+    // wrap (teleport)
+    if (ast.x < 0) ast.x = canvas.width
+    if (ast.x > canvas.width) ast.x = 0
+    if (ast.y < 0) ast.y = canvas.height
+    if (ast.y > canvas.height) ast.y = 0
+  })
+
+  // colisiones bala vs asteroide
+  for (var i = asteroides.length - 1; i >= 0; i--) {
+    for (var j = balas.length - 1; j >= 0; j--) {
+
+      var dx = asteroides[i].x - balas[j].x
+      var dy = asteroides[i].y - balas[j].y
+      var dist = Math.sqrt(dx * dx + dy * dy)
+
+      if (dist < asteroides[i].radio) {
+
+        var x = asteroides[i].x
+        var y = asteroides[i].y
+        var tam = asteroides[i].radio
+
+        balas.splice(j, 1)
+        asteroides.splice(i, 1)
+
+        // dividir
+        if (tam > 20) {
+          crearAsteroide(x, y, tam / 1.7)
+          crearAsteroide(x, y, tam / 1.7)
+        }
+
+        break
+      }
+    }
+  }
 }
 
 canvas.addEventListener("mousemove", function(e) {
@@ -98,8 +169,18 @@ function loop() {
   update()
   dibujarNave()
   dibujarBalas()
+  dibujarAsteroides()
+
   requestAnimationFrame(loop)
 }
 
 crearEstrellas()
+// crear asteroides iniciales
+for (var i = 0; i < 5; i++) {
+  crearAsteroide(
+    Math.random() * canvas.width,
+    Math.random() * canvas.height,
+    50
+  )
+}
 loop()
