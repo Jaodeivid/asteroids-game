@@ -20,8 +20,6 @@ function crearAsteroide(x, y, tam) {
     x: x,
     y: y,
     radio: tam,
-    //vel_x: Math.random() * 2 - 1,
-    //vel_y: Math.random() * 2 - 1
     vel_x: (Math.random() - 0.5) * 2,
     vel_y: (Math.random() - 0.5) * 2,
     semilla: Math.random() * 10
@@ -33,7 +31,6 @@ function dibujarAsteroides() {
     var puntos = 8
     for (var i = 0; i <= puntos; i++) {
       var angulo = (i / puntos) * Math.PI * 2
-      // variacion aleatoria pero fija por asteroide
       var r = ast.radio * (0.85 + Math.sin(i * ast.semilla) * 0.15)
       var px = ast.x + Math.cos(angulo) * r
       var py = ast.y + Math.sin(angulo) * r
@@ -45,20 +42,6 @@ function dibujarAsteroides() {
   })
 }
 
-function crearEstrellas() {
-  for (var i = 0; i < 100; i++) {
-    var estrella = document.createElement("div")
-    var tamanio = Math.random() * 2 + 1 + "px"
-    estrella.style.position = "fixed"
-    estrella.style.width = tamanio
-    estrella.style.height = tamanio
-    estrella.style.background = "white"
-    estrella.style.borderRadius = "50%"
-    estrella.style.left = Math.random() * 100 + "%"
-    estrella.style.top = Math.random() * 100 + "%"
-    document.body.appendChild(estrella)
-  }
-}
 function disparar() {
   if (puedoDisparar) {
     balas.push({
@@ -109,19 +92,16 @@ function update() {
       balas.splice(i, 1)
     }
   }
-  // mover asteroides
   asteroides.forEach(function(ast) {
     ast.x += ast.vel_x
     ast.y += ast.vel_y
 
-    // wrap (teleport)
     if (ast.x < 0) ast.x = canvas.width
     if (ast.x > canvas.width) ast.x = 0
     if (ast.y < 0) ast.y = canvas.height
     if (ast.y > canvas.height) ast.y = 0
   })
 
-  // colisiones bala vs asteroide
   for (var i = asteroides.length - 1; i >= 0; i--) {
     for (var j = balas.length - 1; j >= 0; j--) {
 
@@ -138,7 +118,6 @@ function update() {
         balas.splice(j, 1)
         asteroides.splice(i, 1)
 
-        // dividir
         if (tam > 20) {
           crearAsteroide(x, y, tam / 1.7)
           crearAsteroide(x, y, tam / 1.7)
@@ -174,8 +153,6 @@ function loop() {
   requestAnimationFrame(loop)
 }
 
-crearEstrellas()
-// crear asteroides iniciales
 for (var i = 0; i < 5; i++) {
   crearAsteroide(
     Math.random() * canvas.width,
