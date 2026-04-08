@@ -20,8 +20,8 @@ function crearAsteroide(x, y, tam) {
     x: x,
     y: y,
     radio: tam,
-    vel_x: (Math.random() - 0.5) * 2,
-    vel_y: (Math.random() - 0.5) * 2,
+    vel_x: (Math.random() - 0.5) * 3,
+    vel_y: (Math.random() - 0.5) * 3,
     semilla: Math.random() * 10
   })
 }
