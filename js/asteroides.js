@@ -38,3 +38,7 @@ export function dibujarAsteroides(ctx) {
     ctx.stroke()
   })
 }
+
+export function reiniciarAsteroides() {
+  asteroides = []
+}

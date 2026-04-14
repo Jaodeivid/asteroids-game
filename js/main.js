@@ -1,9 +1,9 @@
-import { actualizarNave, dibujarNave, respawnNave, nave } from "./nave.js"
+import { actualizarNave, dibujarNave, respawnNave, nave, dibujarVidas } from "./nave.js"
 import { balas, actualizarBalas, dibujarBalas } from "./balas.js"
-import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides } from "./asteroides.js"
+import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides, reiniciarAsteroides } from "./asteroides.js"
 import { mouse, iniciarControles } from "./input.js"
 import { menuActivo as menuInicial, dibujarMenu, clickEnBoton } from "./menu.js"
-
+import { menuGameOverActivo, dibujarMenuGameOver, activarGameOver, desactivarGameOver, clickEnBotonRestart } from "./menuGameOver.js"
 var canvas = document.getElementById("gameCanvas")
 var ctx = canvas.getContext("2d")
 canvas.width = 800
@@ -23,15 +23,53 @@ canvas.addEventListener("click", function(e) {
       iniciarJuego()
     }
   }
+  else if (menuGameOverActivo) {
+    var rect = canvas.getBoundingClientRect()
+    var x = e.clientX - rect.left
+    var y = e.clientY - rect.top
+    if (clickEnBotonRestart(x, y, canvas)) {
+      desactivarGameOver()
+      reiniciarAsteroides()
+      nave.vidas = 3
+      iniciarJuego()
+    }
+  }
+
 })
 
-function iniciarJuego() {
+/*function iniciarJuego() {
   for (var i = 0; i < 5; i++) {
     crearAsteroide(
       Math.random() * canvas.width,
       Math.random() * canvas.height,
       50
     )
+  }
+}*/
+
+function iniciarJuego() {
+  for (var i = 0; i < 5; i++) {
+    var lado = Math.floor(Math.random() * 4)
+    var margen = 50
+    var x, y
+
+    if (lado === 0) {
+      x = Math.random() * canvas.width
+      y = -margen
+    } else if (lado === 1) {
+      x = Math.random() * canvas.width
+      y = canvas.height + margen
+    } else if (lado === 2) {
+      x = -margen
+      y = Math.random() * canvas.height
+    } else {
+      x = canvas.width + margen
+      y = Math.random() * canvas.height
+    }
+
+    var tam = Math.random() * 40 + 17
+
+    crearAsteroide(x, y, tam)
   }
 }
 
@@ -78,6 +116,11 @@ function detectarColisionNave() {
     var dist = Math.sqrt(dx * dx + dy * dy)
 
     if (dist < asteroides[i].radio + 15) { 
+      nave.vidas--
+      if (nave.vidas <= 0) {
+        activarGameOver()
+        break
+      }
       respawnNave(canvas)
       break 
     }
@@ -89,6 +132,8 @@ function loop() {
 
   if (menuActivo) {
     dibujarMenu(ctx, canvas)
+  } else if (menuGameOverActivo) {
+    dibujarMenuGameOver(ctx, canvas)
   } else {
     actualizarNave(mouse.x, mouse.y, canvas)
     actualizarBalas(espacioPresionado)
@@ -98,6 +143,7 @@ function loop() {
     dibujarNave(ctx)
     dibujarBalas(ctx)
     dibujarAsteroides(ctx)
+    dibujarVidas(ctx)
   }
 
   requestAnimationFrame(loop)
