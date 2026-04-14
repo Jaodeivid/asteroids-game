@@ -5,9 +5,12 @@ export var nave = {
   vel_x: 0,
   vel_y: 0,
   velocidad: 3,
+  vidas: 3,
   invulnerable: false,
   timerInvulnerable: 0
 }
+var corazonImg = new Image()
+corazonImg.src = "assets/corazon-removebg-preview.png"
 
 var historialX = []
 var historialY = []
@@ -90,4 +93,10 @@ export function dibujarNave(ctx) {
   ctx.closePath()
   ctx.stroke()
   ctx.restore()
+}
+
+export function dibujarVidas(ctx) {
+  for (var i = 0; i < nave.vidas; i++) {
+    ctx.drawImage(corazonImg, 10 + i * 40, 10, 30, 30)
+  }
 }
