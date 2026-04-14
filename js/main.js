@@ -1,4 +1,4 @@
-import { nave, actualizarNave, dibujarNave } from "./nave.js"
+import { actualizarNave, dibujarNave } from "./nave.js"
 import { balas, actualizarBalas, dibujarBalas } from "./balas.js"
 import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides } from "./asteroides.js"
 import { mouse, iniciarControles } from "./input.js"
@@ -10,7 +10,6 @@ canvas.height = 600
 
 iniciarControles(canvas)
 
-// Crear asteroides iniciales
 for (var i = 0; i < 5; i++) {
   crearAsteroide(
     Math.random() * canvas.width,

@@ -8,11 +8,9 @@ export function iniciarControles(canvas) {
     mouse.x = e.clientX - rect.left
     mouse.y = e.clientY - rect.top
   })
-
   document.addEventListener("keydown", function(e) {
     if (e.key === " ") disparar()
   })
-
   canvas.addEventListener("click", function() {
     disparar()
   })

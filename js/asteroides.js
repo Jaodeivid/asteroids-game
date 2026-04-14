@@ -2,7 +2,8 @@ export var asteroides = []
 
 export function crearAsteroide(x, y, tam) {
   asteroides.push({
-    x, y,
+    x: x,
+    y: y,
     radio: tam,
     vel_x: (Math.random() - 0.5) * 3,
     vel_y: (Math.random() - 0.5) * 3,
