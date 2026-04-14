@@ -1,4 +1,4 @@
-import { actualizarNave, dibujarNave } from "./nave.js"
+import { actualizarNave, dibujarNave, respawnNave, nave } from "./nave.js"
 import { balas, actualizarBalas, dibujarBalas } from "./balas.js"
 import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides } from "./asteroides.js"
 import { mouse, iniciarControles } from "./input.js"
@@ -69,6 +69,21 @@ function detectarColisiones() {
   }
 }
 
+function detectarColisionNave() {
+  if (nave.invulnerable) return
+
+  for (var i = 0; i < asteroides.length; i++) {
+    var dx = asteroides[i].x - nave.x
+    var dy = asteroides[i].y - nave.y
+    var dist = Math.sqrt(dx * dx + dy * dy)
+
+    if (dist < asteroides[i].radio + 15) { 
+      respawnNave(canvas)
+      break 
+    }
+  }
+}
+
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
 
@@ -79,6 +94,7 @@ function loop() {
     actualizarBalas(espacioPresionado)
     actualizarAsteroides(canvas)
     detectarColisiones()
+    detectarColisionNave()
     dibujarNave(ctx)
     dibujarBalas(ctx)
     dibujarAsteroides(ctx)
