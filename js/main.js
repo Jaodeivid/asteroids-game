@@ -10,6 +10,18 @@ canvas.height = 600
 
 iniciarControles(canvas)
 
+var espacioPresionado = false
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === " ") espacioPresionado = true
+})
+document.addEventListener("keyup", function(e) {
+  if (e.key === " ") espacioPresionado = false
+})
+window.addEventListener("blur", function() {
+  espacioPresionado = false
+})
+
 for (var i = 0; i < 5; i++) {
   crearAsteroide(
     Math.random() * canvas.width,
@@ -42,8 +54,8 @@ function detectarColisiones() {
 
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  actualizarNave(mouse.x, mouse.y)
-  actualizarBalas()
+  actualizarNave(mouse.x, mouse.y, canvas)
+  actualizarBalas(espacioPresionado)
   actualizarAsteroides(canvas)
   detectarColisiones()
   dibujarNave(ctx)
