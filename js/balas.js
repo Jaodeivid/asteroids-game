@@ -13,11 +13,15 @@ export function disparar() {
       vida: 80
     })
     puedoDisparar = false
-    setTimeout(function() { puedoDisparar = true }, 200)
+    setTimeout(function() {
+      puedoDisparar = true
+    }, 200)
   }
 }
 
-export function actualizarBalas() {
+export function actualizarBalas(teclaEspacio) {
+  if (teclaEspacio) disparar()
+
   balas.forEach(function(bala) {
     bala.x += bala.vel_x
     bala.y += bala.vel_y

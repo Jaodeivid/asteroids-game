@@ -2,21 +2,50 @@ import { actualizarNave, dibujarNave } from "./nave.js"
 import { balas, actualizarBalas, dibujarBalas } from "./balas.js"
 import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides } from "./asteroides.js"
 import { mouse, iniciarControles } from "./input.js"
+import { menuActivo as menuInicial, dibujarMenu, clickEnBoton } from "./menu.js"
 
 var canvas = document.getElementById("gameCanvas")
 var ctx = canvas.getContext("2d")
 canvas.width = 800
 canvas.height = 600
 
+var menuActivo = menuInicial
+
 iniciarControles(canvas)
 
-for (var i = 0; i < 5; i++) {
-  crearAsteroide(
-    Math.random() * canvas.width,
-    Math.random() * canvas.height,
-    50
-  )
+canvas.addEventListener("click", function(e) {
+  if (menuActivo) {
+    var rect = canvas.getBoundingClientRect()
+    var x = e.clientX - rect.left
+    var y = e.clientY - rect.top
+    if (clickEnBoton(x, y, canvas)) {
+      menuActivo = false
+      iniciarJuego()
+    }
+  }
+})
+
+function iniciarJuego() {
+  for (var i = 0; i < 5; i++) {
+    crearAsteroide(
+      Math.random() * canvas.width,
+      Math.random() * canvas.height,
+      50
+    )
+  }
 }
+
+var espacioPresionado = false
+
+document.addEventListener("keydown", function(e) {
+  if (e.key === " ") espacioPresionado = true
+})
+document.addEventListener("keyup", function(e) {
+  if (e.key === " ") espacioPresionado = false
+})
+window.addEventListener("blur", function() {
+  espacioPresionado = false
+})
 
 function detectarColisiones() {
   for (var i = asteroides.length - 1; i >= 0; i--) {
@@ -42,13 +71,19 @@ function detectarColisiones() {
 
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-  actualizarNave(mouse.x, mouse.y)
-  actualizarBalas()
-  actualizarAsteroides(canvas)
-  detectarColisiones()
-  dibujarNave(ctx)
-  dibujarBalas(ctx)
-  dibujarAsteroides(ctx)
+
+  if (menuActivo) {
+    dibujarMenu(ctx, canvas)
+  } else {
+    actualizarNave(mouse.x, mouse.y, canvas)
+    actualizarBalas(espacioPresionado)
+    actualizarAsteroides(canvas)
+    detectarColisiones()
+    dibujarNave(ctx)
+    dibujarBalas(ctx)
+    dibujarAsteroides(ctx)
+  }
+
   requestAnimationFrame(loop)
 }
 
