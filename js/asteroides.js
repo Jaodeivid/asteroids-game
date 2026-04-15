@@ -1,5 +1,4 @@
 export var asteroides = []
-
 export function crearAsteroide(x, y, tam) {
   asteroides.push({
     x: x,
@@ -10,7 +9,6 @@ export function crearAsteroide(x, y, tam) {
     semilla: Math.random() * 10
   })
 }
-
 export function actualizarAsteroides(canvas) {
   asteroides.forEach(function(ast) {
     ast.x += ast.vel_x
@@ -21,7 +19,6 @@ export function actualizarAsteroides(canvas) {
     if (ast.y > canvas.height) ast.y = 0
   })
 }
-
 export function dibujarAsteroides(ctx) {
   asteroides.forEach(function(ast) {
     ctx.beginPath()
@@ -38,7 +35,6 @@ export function dibujarAsteroides(ctx) {
     ctx.stroke()
   })
 }
-
 export function reiniciarAsteroides() {
   asteroides = []
 }
