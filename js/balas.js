@@ -1,8 +1,6 @@
 import { nave } from "./nave.js"
-
 export var balas = []
 var puedoDisparar = true
-
 export function disparar() {
   if (puedoDisparar) {
     balas.push({
@@ -18,10 +16,8 @@ export function disparar() {
     }, 200)
   }
 }
-
 export function actualizarBalas(teclaEspacio) {
   if (teclaEspacio) disparar()
-
   balas.forEach(function(bala) {
     bala.x += bala.vel_x
     bala.y += bala.vel_y
@@ -31,7 +27,6 @@ export function actualizarBalas(teclaEspacio) {
     if (balas[i].vida <= 0) balas.splice(i, 1)
   }
 }
-
 export function dibujarBalas(ctx) {
   balas.forEach(function(bala) {
     ctx.beginPath()

@@ -8,11 +8,8 @@ var canvas = document.getElementById("gameCanvas")
 var ctx = canvas.getContext("2d")
 canvas.width = 800
 canvas.height = 600
-
 var menuActivo = menuInicial
-
 iniciarControles(canvas)
-
 canvas.addEventListener("click", function(e) {
   if (menuActivo) {
     var rect = canvas.getBoundingClientRect()
@@ -36,7 +33,6 @@ canvas.addEventListener("click", function(e) {
   }
 
 })
-
 /*function iniciarJuego() {
   for (var i = 0; i < 5; i++) {
     crearAsteroide(
@@ -46,13 +42,11 @@ canvas.addEventListener("click", function(e) {
     )
   }
 }*/
-
 function iniciarJuego() {
   for (var i = 0; i < 5; i++) {
     var lado = Math.floor(Math.random() * 4)
     var margen = 50
     var x, y
-
     if (lado === 0) {
       x = Math.random() * canvas.width
       y = -margen
@@ -66,25 +60,17 @@ function iniciarJuego() {
       x = canvas.width + margen
       y = Math.random() * canvas.height
     }
-
     var tam = Math.random() * 40 + 17
-
     crearAsteroide(x, y, tam)
   }
 }
-
 var espacioPresionado = false
-
 document.addEventListener("keydown", function(e) {
   if (e.key === " ") espacioPresionado = true
 })
 document.addEventListener("keyup", function(e) {
   if (e.key === " ") espacioPresionado = false
 })
-window.addEventListener("blur", function() {
-  espacioPresionado = false
-})
-
 function detectarColisiones() {
   for (var i = asteroides.length - 1; i >= 0; i--) {
     for (var j = balas.length - 1; j >= 0; j--) {
@@ -106,15 +92,12 @@ function detectarColisiones() {
     }
   }
 }
-
 function detectarColisionNave() {
   if (nave.invulnerable) return
-
   for (var i = 0; i < asteroides.length; i++) {
     var dx = asteroides[i].x - nave.x
     var dy = asteroides[i].y - nave.y
     var dist = Math.sqrt(dx * dx + dy * dy)
-
     if (dist < asteroides[i].radio + 15) { 
       nave.vidas--
       if (nave.vidas <= 0) {
@@ -126,10 +109,8 @@ function detectarColisionNave() {
     }
   }
 }
-
 function loop() {
   ctx.clearRect(0, 0, canvas.width, canvas.height)
-
   if (menuActivo) {
     dibujarMenu(ctx, canvas)
   } else if (menuGameOverActivo) {
@@ -145,8 +126,6 @@ function loop() {
     dibujarAsteroides(ctx)
     dibujarVidas(ctx)
   }
-
   requestAnimationFrame(loop)
 }
-
 loop()

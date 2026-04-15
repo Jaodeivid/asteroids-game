@@ -11,29 +11,16 @@ export var nave = {
 }
 var corazonImg = new Image()
 corazonImg.src = "assets/corazon-removebg-preview.png"
-
-var historialX = []
-var historialY = []
-
-var teclasArriba = ["w", "ArrowUp"]
-var teclasBajo   = ["s", "ArrowDown"]
-var teclasIzq    = ["a", "ArrowLeft"]
-var teclasDer    = ["d", "ArrowRight"]
-
+var teclaY = ""
+var teclaX = ""
 export function registrarTeclaDown(key) {
-  if (teclasArriba.includes(key) || teclasBajo.includes(key)) {
-    if (!historialY.includes(key)) historialY.push(key)
-  }
-  if (teclasIzq.includes(key) || teclasDer.includes(key)) {
-    if (!historialX.includes(key)) historialX.push(key)
-  }
+  if ((key === "w" || key === "ArrowUp" || key === "s" || key === "ArrowDown") && teclaY === "") teclaY = key
+  if ((key === "a" || key === "ArrowLeft" || key === "d" || key === "ArrowRight") && teclaX === "") teclaX = key
 }
-
 export function registrarTeclaUp(key) {
-  historialY = historialY.filter(function(k) { return k !== key })
-  historialX = historialX.filter(function(k) { return k !== key })
+  if (teclaY === key) teclaY = ""
+  if (teclaX === key) teclaX = ""
 }
-
 export function respawnNave(canvas) {
   nave.x = canvas.width / 2
   nave.y = canvas.height / 2
@@ -42,45 +29,27 @@ export function respawnNave(canvas) {
   nave.invulnerable = true
   nave.timerInvulnerable = 120
 }
-
 export function actualizarNave(mouseX, mouseY, canvas) {
   nave.angulo = Math.atan2(mouseY - nave.y, mouseX - nave.x)
-
-  var ultimaY = historialY[historialY.length - 1]
-  if (teclasArriba.includes(ultimaY))    
-    nave.vel_y = -nave.velocidad
-  else if (teclasBajo.includes(ultimaY)) 
-    nave.vel_y = nave.velocidad
-  else                                    
-    nave.vel_y = 0
-
-  var ultimaX = historialX[historialX.length - 1]
-  if (teclasIzq.includes(ultimaX))       
-    nave.vel_x = -nave.velocidad
-  else if (teclasDer.includes(ultimaX))  
-    nave.vel_x = nave.velocidad
-  else                                    
-    nave.vel_x = 0
-
+  nave.vel_x = 0
+  nave.vel_y = 0
+  if (teclaY === "w" || teclaY === "ArrowUp")   nave.vel_y = -nave.velocidad
+  if (teclaY === "s" || teclaY === "ArrowDown")  nave.vel_y =  nave.velocidad
+  if (teclaX === "a" || teclaX === "ArrowLeft")  nave.vel_x = -nave.velocidad
+  if (teclaX === "d" || teclaX === "ArrowRight") nave.vel_x =  nave.velocidad
   nave.x += nave.vel_x
   nave.y += nave.vel_y
-
   if (nave.x < 0) nave.x = canvas.width
   if (nave.x > canvas.width) nave.x = 0
   if (nave.y < 0) nave.y = canvas.height
   if (nave.y > canvas.height) nave.y = 0
-
   if (nave.invulnerable) {
     nave.timerInvulnerable--
-    if (nave.timerInvulnerable <= 0) {
-      nave.invulnerable = false
-    }
+    if (nave.timerInvulnerable <= 0) nave.invulnerable = false
   }
 }
-
 export function dibujarNave(ctx) {
   if (nave.invulnerable && Math.floor(nave.timerInvulnerable / 10) % 2 === 0) return
-
   ctx.save()
   ctx.translate(nave.x, nave.y)
   ctx.rotate(nave.angulo)
@@ -94,7 +63,6 @@ export function dibujarNave(ctx) {
   ctx.stroke()
   ctx.restore()
 }
-
 export function dibujarVidas(ctx) {
   for (var i = 0; i < nave.vidas; i++) {
     ctx.drawImage(corazonImg, 10 + i * 40, 10, 30, 30)
