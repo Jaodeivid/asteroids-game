@@ -9,6 +9,7 @@ var ctx = canvas.getContext("2d")
 canvas.width = 800
 canvas.height = 600
 var menuActivo = menuInicial
+var explosionSound = document.getElementById("explosionSound")
 iniciarControles(canvas)
 canvas.addEventListener("click", function(e) {
   if (menuActivo) {
@@ -99,6 +100,8 @@ function detectarColisionNave() {
     var dy = asteroides[i].y - nave.y
     var dist = Math.sqrt(dx * dx + dy * dy)
     if (dist < asteroides[i].radio + 15) { 
+      explosionSound.currentTime = 0
+      explosionSound.play()
       nave.vidas--
       if (nave.vidas <= 0) {
         activarGameOver()

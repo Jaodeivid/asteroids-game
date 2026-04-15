@@ -1,8 +1,11 @@
 import { nave } from "./nave.js"
 export var balas = []
 var puedoDisparar = true
+export var laserSound = document.getElementById("laserSound")
 export function disparar() {
   if (puedoDisparar) {
+    laserSound.currentTime = 0
+    laserSound.play()
     balas.push({
       x: nave.x,
       y: nave.y,
