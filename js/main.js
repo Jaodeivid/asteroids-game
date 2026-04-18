@@ -1,9 +1,12 @@
-import { actualizarNave, dibujarNave, respawnNave, nave, dibujarVidas } from "./nave.js"
-import { balas, actualizarBalas, dibujarBalas } from "./balas.js"
-import { asteroides, crearAsteroide, actualizarAsteroides, dibujarAsteroides, reiniciarAsteroides } from "./asteroides.js"
-import { mouse, iniciarControles } from "./input.js"
-import { menuActivo as menuInicial, dibujarMenu, clickEnBoton } from "./menu.js"
-import { menuGameOverActivo, dibujarMenuGameOver, activarGameOver, desactivarGameOver, clickEnBotonRestart } from "./menuGameOver.js"
+import { actualizarNave, respawnNave, nave } from "./model/nave.js"
+import { balas, actualizarBalas } from "./model/balas.js"
+import { asteroides, crearAsteroide, actualizarAsteroides, reiniciarAsteroides } from "./model/asteroides.js"
+import { mouse, iniciarControles } from "./controller/inputController.js"
+import { menuActivo as menuInicial, dibujarMenu, clickEnBoton } from "./view/menuView.js"
+import { menuGameOverActivo, dibujarMenuGameOver, activarGameOver, desactivarGameOver, clickEnBotonRestart } from "./view/menuGameOverView.js"
+import { dibujarNave, dibujarVidas } from "./view/naveView.js"
+import { dibujarAsteroides } from "./view/asteroidesView.js"
+import { dibujarBalas } from "./view/balasView.js"
 var canvas = document.getElementById("gameCanvas")
 var ctx = canvas.getContext("2d")
 canvas.width = 800
@@ -47,8 +50,7 @@ function iniciarJuego() {
       x = canvas.width + margen
       y = Math.random() * canvas.height
     }
-    var tam = Math.random() * 40 + 17
-    crearAsteroide(x, y, tam)
+    crearAsteroide(x, y, Math.random() * 40 + 17)
   }
 }
 function detectarColisiones() {

@@ -1,7 +1,7 @@
 import { nave } from "./nave.js"
 export var balas = []
 var puedoDisparar = true
-export var laserSound = document.getElementById("laserSound")
+var laserSound = document.getElementById("laserSound")
 export function disparar() {
   if (puedoDisparar) {
     laserSound.currentTime = 0
@@ -28,12 +28,4 @@ export function actualizarBalas() {
   for (var i = balas.length - 1; i >= 0; i--) {
     if (balas[i].vida <= 0) balas.splice(i, 1)
   }
-}
-export function dibujarBalas(ctx) {
-  balas.forEach(function(bala) {
-    ctx.beginPath()
-    ctx.arc(bala.x, bala.y, 3, 0, Math.PI * 2)
-    ctx.fillStyle = "orange"
-    ctx.fill()
-  })
 }

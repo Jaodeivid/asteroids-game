@@ -1,5 +1,5 @@
-import { disparar } from "./balas.js"
-import { registrarTeclaDown, registrarTeclaUp } from "./nave.js"
+import { disparar } from "../model/balas.js"
+import { registrarTeclaDown, registrarTeclaUp } from "../model/nave.js"
 export var mouse = { x: 0, y: 0 }
 export function iniciarControles(canvas) {
   canvas.addEventListener("mousemove", function(e) {
@@ -16,4 +16,4 @@ export function iniciarControles(canvas) {
   canvas.addEventListener("click", function() {
     disparar()
   })
-}
+}   
