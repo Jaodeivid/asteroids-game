@@ -19,8 +19,7 @@ export function disparar() {
     }, 200)
   }
 }
-export function actualizarBalas(teclaEspacio) {
-  if (teclaEspacio) disparar()
+export function actualizarBalas() {
   balas.forEach(function(bala) {
     bala.x += bala.vel_x
     bala.y += bala.vel_y

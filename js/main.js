@@ -12,19 +12,15 @@ var menuActivo = menuInicial
 var explosionSound = document.getElementById("explosionSound")
 iniciarControles(canvas)
 canvas.addEventListener("click", function(e) {
+  var rect = canvas.getBoundingClientRect()
+  var x = e.clientX - rect.left
+  var y = e.clientY - rect.top
   if (menuActivo) {
-    var rect = canvas.getBoundingClientRect()
-    var x = e.clientX - rect.left
-    var y = e.clientY - rect.top
     if (clickEnBoton(x, y, canvas)) {
       menuActivo = false
       iniciarJuego()
     }
-  }
-  else if (menuGameOverActivo) {
-    var rect = canvas.getBoundingClientRect()
-    var x = e.clientX - rect.left
-    var y = e.clientY - rect.top
+  } else if (menuGameOverActivo) {
     if (clickEnBotonRestart(x, y, canvas)) {
       desactivarGameOver()
       reiniciarAsteroides()
@@ -32,17 +28,7 @@ canvas.addEventListener("click", function(e) {
       iniciarJuego()
     }
   }
-
 })
-/*function iniciarJuego() {
-  for (var i = 0; i < 5; i++) {
-    crearAsteroide(
-      Math.random() * canvas.width,
-      Math.random() * canvas.height,
-      50
-    )
-  }
-}*/
 function iniciarJuego() {
   for (var i = 0; i < 5; i++) {
     var lado = Math.floor(Math.random() * 4)
@@ -65,13 +51,6 @@ function iniciarJuego() {
     crearAsteroide(x, y, tam)
   }
 }
-var espacioPresionado = false
-document.addEventListener("keydown", function(e) {
-  if (e.key === " ") espacioPresionado = true
-})
-document.addEventListener("keyup", function(e) {
-  if (e.key === " ") espacioPresionado = false
-})
 function detectarColisiones() {
   for (var i = asteroides.length - 1; i >= 0; i--) {
     for (var j = balas.length - 1; j >= 0; j--) {
@@ -99,7 +78,7 @@ function detectarColisionNave() {
     var dx = asteroides[i].x - nave.x
     var dy = asteroides[i].y - nave.y
     var dist = Math.sqrt(dx * dx + dy * dy)
-    if (dist < asteroides[i].radio + 15) { 
+    if (dist < asteroides[i].radio + 15) {
       explosionSound.currentTime = 0
       explosionSound.play()
       nave.vidas--
@@ -108,7 +87,7 @@ function detectarColisionNave() {
         break
       }
       respawnNave(canvas)
-      break 
+      break
     }
   }
 }
@@ -120,7 +99,7 @@ function loop() {
     dibujarMenuGameOver(ctx, canvas)
   } else {
     actualizarNave(mouse.x, mouse.y, canvas)
-    actualizarBalas(espacioPresionado)
+    actualizarBalas()
     actualizarAsteroides(canvas)
     detectarColisiones()
     detectarColisionNave()

@@ -11,15 +11,12 @@ export var nave = {
 }
 var corazonImg = new Image()
 corazonImg.src = "assets/corazon-removebg-preview.png"
-var teclaY = ""
-var teclaX = ""
+var teclasPresionadas = new Set()
 export function registrarTeclaDown(key) {
-  if ((key === "w" || key === "ArrowUp" || key === "s" || key === "ArrowDown") && teclaY === "") teclaY = key
-  if ((key === "a" || key === "ArrowLeft" || key === "d" || key === "ArrowRight") && teclaX === "") teclaX = key
+  teclasPresionadas.add(key)
 }
 export function registrarTeclaUp(key) {
-  if (teclaY === key) teclaY = ""
-  if (teclaX === key) teclaX = ""
+  teclasPresionadas.delete(key)
 }
 export function respawnNave(canvas) {
   nave.x = canvas.width / 2
@@ -33,10 +30,14 @@ export function actualizarNave(mouseX, mouseY, canvas) {
   nave.angulo = Math.atan2(mouseY - nave.y, mouseX - nave.x)
   nave.vel_x = 0
   nave.vel_y = 0
-  if (teclaY === "w" || teclaY === "ArrowUp")   nave.vel_y = -nave.velocidad
-  if (teclaY === "s" || teclaY === "ArrowDown")  nave.vel_y =  nave.velocidad
-  if (teclaX === "a" || teclaX === "ArrowLeft")  nave.vel_x = -nave.velocidad
-  if (teclaX === "d" || teclaX === "ArrowRight") nave.vel_x =  nave.velocidad
+  var arriba = teclasPresionadas.has("w") || teclasPresionadas.has("ArrowUp")
+  var abajo = teclasPresionadas.has("s") || teclasPresionadas.has("ArrowDown")
+  var izq = teclasPresionadas.has("a") || teclasPresionadas.has("ArrowLeft")
+  var der = teclasPresionadas.has("d") || teclasPresionadas.has("ArrowRight")
+  if (arriba && !abajo) nave.vel_y = -nave.velocidad
+  if (abajo && !arriba) nave.vel_y =  nave.velocidad
+  if (izq   && !der)   nave.vel_x = -nave.velocidad
+  if (der   && !izq)   nave.vel_x =  nave.velocidad
   nave.x += nave.vel_x
   nave.y += nave.vel_y
   if (nave.x < 0) nave.x = canvas.width
