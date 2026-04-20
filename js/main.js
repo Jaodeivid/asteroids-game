@@ -7,6 +7,7 @@ import { menuGameOverActivo, dibujarMenuGameOver, activarGameOver, desactivarGam
 import { dibujarNave, dibujarVidas } from "./view/naveView.js"
 import { dibujarAsteroides } from "./view/asteroidesView.js"
 import { dibujarBalas } from "./view/balasView.js"
+import { sumarPuntos, resetearPuntos, dibujarPuntaje, puntosSegunRadio } from "./view/puntajeView.js"
 var canvas = document.getElementById("gameCanvas")
 var ctx = canvas.getContext("2d")
 canvas.width = 800
@@ -27,6 +28,7 @@ canvas.addEventListener("click", function(e) {
     if (clickEnBotonRestart(x, y, canvas)) {
       desactivarGameOver()
       reiniciarAsteroides()
+      resetearPuntos()
       nave.vidas = 3
       iniciarJuego()
     }
@@ -65,6 +67,7 @@ function detectarColisiones() {
         var tam = asteroides[i].radio
         balas.splice(j, 1)
         asteroides.splice(i, 1)
+        sumarPuntos(puntosSegunRadio(tam))
         if (tam > 20) {
           crearAsteroide(x, y, tam / 1.7)
           crearAsteroide(x, y, tam / 1.7)
@@ -109,6 +112,7 @@ function loop() {
     dibujarBalas(ctx)
     dibujarAsteroides(ctx)
     dibujarVidas(ctx)
+    dibujarPuntaje(ctx, canvas)
   }
   requestAnimationFrame(loop)
 }
